@@ -5,8 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:twitter_poc"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="800" Width="1500"
+        >
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0"  VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <!--<Button Style="{StaticResource buttonStyle}" Command="{Binding QuickLogin}" Content="QuickLogin"/>-->
+                <Button Style="{StaticResource buttonStyle}" Name="LoginButton" Command="{Binding Login}" Content="UserLogin"/>
+                <TextBox Text="{Binding Pin}"/>
+                <Button Command="{Binding Verify}" Content="Verify"/>
+
+            </StackPanel>
+
+            <Label Content="{Binding Name}"></Label>
+            <Label Content="{Binding Username}"></Label>
+            <Label Content="{Binding FollowersCount}"></Label>
+            <Label Content="{Binding LikesCount}"></Label>
+            <Label Content="{Binding TweetsCount}"></Label>
+
+            <Button Command="{Binding GetTimeline}" Content="Get Timeline"/>
+            <Button Command="{Binding GetMention}" Content="Get Mention"/>
+            
+            <Label Content="Search Query"/>
+            <TextBox Text="{Binding Query}"/>
+            <Button Command="{Binding Search}" Content="Search"/>
+
+            <Label Content="Search Replies to Tweet ID"/>
+            <TextBox Text="{Binding TweetId}"/>
+            <Button Command="{Binding SearchRepliesToId}" Content="Search Replies to Tweet ID"/>
+        </StackPanel>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10"/>
+                <RowDefinition MinHeight="300"/>
+            </Grid.RowDefinitions>
+
+            <TextBox Grid.Row="0"></TextBox>
+            
+            <ListView Grid.Row="1" ItemsSource="{Binding Tweets}" >
+                <ListView.View>
+                    <GridView >
+                        <GridViewColumn Width="Auto" Header="Username" DisplayMemberBinding="{Binding username}"/>
+                        <GridViewColumn Width="Auto" Header="Id" DisplayMemberBinding="{Binding id}"/>
+                        <GridViewColumn Width="Auto" Header="Text" DisplayMemberBinding="{Binding text}"/>
+                        <GridViewColumn Width="Auto" Header="Likes" DisplayMemberBinding="{Binding likes}"/>
+                        <GridViewColumn Width="Auto" Header="Retweets" DisplayMemberBinding="{Binding retweets}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
         
     </Grid>
+
+    
 </Window>

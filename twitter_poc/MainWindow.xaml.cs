@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using twitter_poc.ViewModel;
+
 namespace twitter_poc
 {
     /// <summary>
@@ -20,9 +22,15 @@ namespace twitter_poc
     /// </summary>
     public partial class MainWindow : Window
     {
+        Twitter _twitter;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            _twitter = new Twitter();
+            this.DataContext = _twitter;
         }
+        
     }
 }
