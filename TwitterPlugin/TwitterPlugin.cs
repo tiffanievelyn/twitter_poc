@@ -48,8 +48,7 @@ namespace TwitterPlugin
         {
             Dictionary<string, string> info = new Dictionary<string, string>();
             var user = User.GetAuthenticatedUser();
-            
-            Console.WriteLine(user);
+
             info.Add("name", user.Name);
             info.Add("username", user.ScreenName);
             info.Add("followers", user.FollowersCount.ToString());
@@ -58,91 +57,44 @@ namespace TwitterPlugin
 
             return info;
         }
+
+        public ObservableCollection<StatusTweet> toObservable(IEnumerable<ITweet> tweets)
+        {
+            StatusCollection collections = new StatusCollection();
+            foreach (var twt in tweets)
+            {
+                StatusTweet s = new StatusTweet
+                {
+                    username = twt.CreatedBy.Name,
+                    id = twt.Id,
+                    text = twt.Text,
+                    likes = twt.FavoriteCount,
+                    retweets = twt.RetweetCount
+                };
+                collections.Add(s);
+            }
+            return collections;
+        }
         
         public ObservableCollection<StatusTweet> getTweetsCollection()
         {
             var user = User.GetAuthenticatedUser();
-
-            StatusCollection collections = new StatusCollection();
-            var twts = Timeline.GetUserTimeline(user.Id);
-            foreach (var twt in twts)
-            {
-                StatusTweet s = new StatusTweet
-                {
-                    username = twt.CreatedBy.Name,
-                    id = twt.Id,
-                    text = twt.Text,
-                    likes = twt.FavoriteCount,
-                    retweets = twt.RetweetCount
-                };
-                collections.Add(s);
-            }
-
-            return collections;
+            return toObservable(Timeline.GetUserTimeline(user.Id));
         }
 
         public ObservableCollection<StatusTweet> searchQuery(string query)
         {
-            StatusCollection collections = new StatusCollection();
-            var twts = Search.SearchTweets(query);
-
-            foreach (var twt in twts)
-            {
-                StatusTweet s = new StatusTweet
-                {
-                    username = twt.CreatedBy.Name,
-                    id = twt.Id,
-                    text = twt.Text,
-                    likes = twt.FavoriteCount,
-                    retweets = twt.RetweetCount
-                };
-                collections.Add(s);
-            }
-
-            return collections;
+            return toObservable(Search.SearchTweets(query));
         }
 
         public ObservableCollection<StatusTweet> getMention()
         {
-            StatusCollection collections = new StatusCollection();
-            var twts = Timeline.GetMentionsTimeline();
-
-            foreach (var twt in twts)
-            {
-                StatusTweet s = new StatusTweet
-                {
-                    username = twt.CreatedBy.Name,
-                    id = twt.Id,
-                    text = twt.Text,
-                    likes = twt.FavoriteCount,
-                    retweets = twt.RetweetCount
-                };
-                collections.Add(s);
-            }
-
-            return collections;
+            return toObservable(Timeline.GetMentionsTimeline());
         }
 
-        public ObservableCollection<StatusTweet>searchRepliesToId(String tweetId)
+        public ObservableCollection<StatusTweet> searchRepliesToId(String tweetId)
         {
-            StatusCollection collections = new StatusCollection();
-            
-            var twts = Search.SearchRepliesTo(Tweet.GetTweet(Convert.ToInt64(tweetId)), false);
-
-            foreach (var twt in twts)
-            {
-                StatusTweet s = new StatusTweet
-                {
-                    username = twt.CreatedBy.Name,
-                    id = twt.Id,
-                    text = twt.Text,
-                    likes = twt.FavoriteCount,
-                    retweets = twt.RetweetCount
-                };
-                collections.Add(s);
-            }
-
-            return collections;
+            return toObservable(Search.SearchRepliesTo(Tweet.GetTweet(Convert.ToInt64(tweetId)), false));
         }
     }
     
