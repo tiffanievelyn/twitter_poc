@@ -23,15 +23,51 @@
 
             </StackPanel>
 
-            <Label Content="{Binding Name}"></Label>
-            <Label Content="{Binding Username}"></Label>
-            <Label Content="{Binding FollowersCount}"></Label>
-            <Label Content="{Binding LikesCount}"></Label>
-            <Label Content="{Binding TweetsCount}"></Label>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
+                <Label Grid.Row="0" Grid.Column="0" Content="Id : "/>
+                <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=User.Id}"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Name : "/>
+                <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=User.Name}"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Screen name : "/>
+                <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=User.ScreenName}"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Protected : "/>
+                <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=User.IsProtected}"/>
+                <Label Grid.Row="4" Grid.Column="0" Content="Followers : "/>
+                <Label Grid.Row="4" Grid.Column="1" Content="{Binding Path=User.FollowersCount}"/>
+                <Label Grid.Row="5" Grid.Column="0" Content="Following : "/>
+                <Label Grid.Row="5" Grid.Column="1" Content="{Binding Path=User.FriendsCount}"/>
+                <Label Grid.Row="6" Grid.Column="0" Content="Likes : "/>
+                <Label Grid.Row="6" Grid.Column="1" Content="{Binding Path=User.FavouritesCount}"/>
+                <Label Grid.Row="7" Grid.Column="0" Content="Geo enabled : "/>
+                <Label Grid.Row="7" Grid.Column="1" Content="{Binding Path=User.IsGeoEnabled}"/>
+                <Label Grid.Row="8" Grid.Column="0" Content="Tweets : "/>
+                <Label Grid.Row="8" Grid.Column="1" Content="{Binding Path=User.StatusCount}"/>
+
+
+            </Grid>
+
+
+            <Button Command="{Binding GetFollowers}" Content="Get Followers"/>
             <Button Command="{Binding GetTimeline}" Content="Get Timeline"/>
             <Button Command="{Binding GetMention}" Content="Get Mention"/>
-            
+            <Button Command="{Binding GetRetweetsOfMe}" Content="Get Retweets Of Me"/>
+
             <Label Content="Search Query"/>
             <TextBox Text="{Binding Query}"/>
             <Button Command="{Binding Search}" Content="Search"/>
@@ -39,24 +75,37 @@
             <Label Content="Search Replies to Tweet ID"/>
             <TextBox Text="{Binding TweetId}"/>
             <Button Command="{Binding SearchRepliesToId}" Content="Search Replies to Tweet ID"/>
+            
         </StackPanel>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="10"/>
-                <RowDefinition MinHeight="300"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBox Grid.Row="0"></TextBox>
+            <ListView Grid.Row="0" ItemsSource="{Binding Users}" >
+                <ListView.View>
+                    <GridView >
+                        <GridViewColumn Width="Auto" Header="Id" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Width="Auto" Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Width="Auto" Header="ScreenName" DisplayMemberBinding="{Binding ScreenName}"/>
+                        <GridViewColumn Width="Auto" Header="Followers" DisplayMemberBinding="{Binding FollowersCount}"/>
+                        <GridViewColumn Width="Auto" Header="Following" DisplayMemberBinding="{Binding FriendsCount}"/>
+                        <GridViewColumn Width="Auto" Header="Likes" DisplayMemberBinding="{Binding FavouritesCount}"/>
+                        <GridViewColumn Width="Auto" Header="Status" DisplayMemberBinding="{Binding StatusCount}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
             
             <ListView Grid.Row="1" ItemsSource="{Binding Tweets}" >
                 <ListView.View>
                     <GridView >
-                        <GridViewColumn Width="Auto" Header="Username" DisplayMemberBinding="{Binding username}"/>
-                        <GridViewColumn Width="Auto" Header="Id" DisplayMemberBinding="{Binding id}"/>
-                        <GridViewColumn Width="Auto" Header="Text" DisplayMemberBinding="{Binding text}"/>
-                        <GridViewColumn Width="Auto" Header="Likes" DisplayMemberBinding="{Binding likes}"/>
-                        <GridViewColumn Width="Auto" Header="Retweets" DisplayMemberBinding="{Binding retweets}"/>
+                        <GridViewColumn Width="Auto" Header="Username" DisplayMemberBinding="{Binding Username}"/>
+                        <GridViewColumn Width="Auto" Header="Id" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Width="Auto" Header="Text" DisplayMemberBinding="{Binding Text}"/>
+                        <GridViewColumn Width="Auto" Header="Likes" DisplayMemberBinding="{Binding Likes}"/>
+                        <GridViewColumn Width="Auto" Header="Retweets" DisplayMemberBinding="{Binding Retweets}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

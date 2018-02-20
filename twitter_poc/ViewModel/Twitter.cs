@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using Tweetinvi.Logic;
 using TwitterPlugin;
+using TwitterPlugin.Model;
 using ViewModel;
 
 
@@ -16,21 +17,24 @@ namespace twitter_poc.ViewModel
 {
     public class Twitter : ObservableObject
     {
-        private string _username;
+        TwitterPlugin.TwitterPlugin twitter = new TwitterPlugin.TwitterPlugin();
 
-        public string Username
+        private TwitterUser _user;
+        private string _pin;
+        private ObservableCollection<TwitterStatus> _tweets = new ObservableCollection<TwitterStatus>();
+        private ObservableCollection<TwitterUser> _users = new ObservableCollection<TwitterUser>();
+        private string _query;
+        private string _tweetid;
+
+        public TwitterUser User
         {
-            get { return _username; }
+            get { return _user; }
             set
             {
-                _username = value;
-                RaisePropertyChangedEvent(nameof(Username));
+                _user = value;
+                RaisePropertyChangedEvent(nameof(User));
             }
-
         }
-
-        private string _pin;
-
         public string Pin
         {
             get { return _pin; }
@@ -40,58 +44,7 @@ namespace twitter_poc.ViewModel
                 RaisePropertyChangedEvent(nameof(Pin));
             }
         }
-
-        private string _name;
-
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value;
-                RaisePropertyChangedEvent(nameof(Name));
-            }
-        }
-
-        private string _followerscount;
-
-        public string FollowersCount
-        {
-            get { return _followerscount; }
-            set
-            {
-                _followerscount = value;
-                RaisePropertyChangedEvent(nameof(FollowersCount));
-            }
-        }
-
-        private string _likescount;
-
-        public string LikesCount
-        {
-            get { return _likescount; }
-            set
-            {
-                _likescount = value;
-                RaisePropertyChangedEvent(nameof(LikesCount));
-            }
-        }
-
-        private string _tweetscount;
-
-        public string TweetsCount
-        {
-            get { return _tweetscount; }
-            set
-            {
-                _tweetscount = value;
-                RaisePropertyChangedEvent(nameof(TweetsCount));
-            }
-        }
-
-        private ObservableCollection<StatusTweet> _tweets = new ObservableCollection<StatusTweet>();
-
-        public ObservableCollection<StatusTweet> Tweets
+        public ObservableCollection<TwitterStatus> Tweets
         {
             get { return _tweets; }
             set
@@ -99,10 +52,16 @@ namespace twitter_poc.ViewModel
                 _tweets = value;
                 RaisePropertyChangedEvent(nameof(Tweets));
             }
+        }      
+        public ObservableCollection<TwitterUser> Users
+        {
+            get { return _users; }
+            set
+            {
+                _users = value;
+                RaisePropertyChangedEvent(nameof(Users));
+            }
         }
-
-        private string _query;
-
         public string Query
         {
             get { return _query; }
@@ -112,9 +71,6 @@ namespace twitter_poc.ViewModel
                 RaisePropertyChangedEvent(nameof(Query));
             }
         }
-
-        private string _tweetid;
-
         public string TweetId
         {
             get { return _tweetid; }
@@ -125,9 +81,7 @@ namespace twitter_poc.ViewModel
             }
         }
 
-        TwitterPlugin.TwitterPlugin twitter = new TwitterPlugin.TwitterPlugin();
-
-        #region Login
+        #region commands
         /*
         public ICommand QuickLogin
         {
@@ -162,6 +116,18 @@ namespace twitter_poc.ViewModel
             getUserInfo();
         }
 
+        public ICommand GetFollowers
+        {
+            get { return new DelegateCommand(getFollowers); }
+        }
+
+        public void getFollowers()
+        {
+            Users.Clear();
+            Users = twitter.GetFollowers();
+            Console.WriteLine(Users);
+        }
+
         public ICommand GetTimeline
         {
             get { return new DelegateCommand(getTimeline); }
@@ -170,7 +136,7 @@ namespace twitter_poc.ViewModel
         public void getTimeline()
         {
             Tweets.Clear();
-            Tweets = twitter.getTweetsCollection();
+            Tweets = twitter.GetTweetsCollection();
         }
 
         public ICommand Search
@@ -181,7 +147,7 @@ namespace twitter_poc.ViewModel
         public void search()
         {
             Tweets.Clear();
-            Tweets = twitter.searchQuery(Query);
+            Tweets = twitter.SearchQuery(Query);
         }
 
         public ICommand GetMention
@@ -192,7 +158,7 @@ namespace twitter_poc.ViewModel
         public void getMention()
         {
             Tweets.Clear();
-            Tweets = twitter.getMention();
+            Tweets = twitter.GetMention();
         }
 
         public ICommand SearchRepliesToId
@@ -203,19 +169,25 @@ namespace twitter_poc.ViewModel
         public void searchRepliesToId()
         {
             Tweets.Clear();
-            Tweets = twitter.searchRepliesToId(TweetId);
+            Tweets = twitter.SearchRepliesToId(TweetId);
+        }
+        
+        public ICommand GetRetweetsOfMe
+        {
+            get { return new DelegateCommand(getRetweetsOfMe); }
+        }
+
+        public void getRetweetsOfMe()
+        {
+            Tweets.Clear();
+            Tweets = twitter.GetRetweetsOfMe();
         }
 
         #endregion
 
         public void getUserInfo()
         {
-            Dictionary<string, string> info = twitter.userInfo();
-            Name = info["name"];
-            Username = info["username"];
-            FollowersCount = "Followers : " + info["followers"];
-            LikesCount = "Likes : " + info["likes"];
-            TweetsCount = "Tweets : " + info["numTweets"];
+            User = twitter.UserInfo();
         }
     }
 }

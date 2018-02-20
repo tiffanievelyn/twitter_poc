@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Tweetinvi;
 using Tweetinvi.Models;
+using TwitterPlugin.Model;
 
 namespace TwitterPlugin
 {
     public class TwitterPlugin
     {
-        private static string ConsumerKey = "dCfWgNmcMiUsMmmZkc0uhkZbq";
-        private static string ConsumerSecret = "xETVYjlj8SEuluKRp85BDN9Twn0xDeMLfwrzzlufrzkUjiwz3R";
-        private static string AccessToken = "862690063624192000-y52pg7YZAbFyfQT0X9hFUI0qLKzVo50";
-        private static string AccessTokenSecret = "Bk9Q4TZEVWfuCCb8zlbxQQmCeDkDxVeCU1CAUAbPjSjDM";
+        Helper helper = new Helper();
 
-        static ConsumerCredentials appCred = new ConsumerCredentials(ConsumerKey, ConsumerSecret);
+        static ConsumerCredentials appCred = new ConsumerCredentials(UserConfig.ConsumerKey, UserConfig.ConsumerSecret);
         IAuthenticationContext authenticationContext = AuthFlow.InitAuthentication(appCred);
 
         public TwitterPlugin(){}
@@ -44,57 +38,42 @@ namespace TwitterPlugin
             Console.WriteLine(User.GetAuthenticatedUser());
         }
 
-        public Dictionary<string, string> userInfo()
+        public TwitterUser UserInfo()
         {
-            Dictionary<string, string> info = new Dictionary<string, string>();
-            var user = User.GetAuthenticatedUser();
-
-            info.Add("name", user.Name);
-            info.Add("username", user.ScreenName);
-            info.Add("followers", user.FollowersCount.ToString());
-            info.Add("likes", user.FavouritesCount.ToString());
-            info.Add("numTweets", user.StatusesCount.ToString());
-
-            return info;
-        }
-
-        public ObservableCollection<StatusTweet> toObservable(IEnumerable<ITweet> tweets)
-        {
-            StatusCollection collections = new StatusCollection();
-            foreach (var twt in tweets)
-            {
-                StatusTweet s = new StatusTweet
-                {
-                    username = twt.CreatedBy.Name,
-                    id = twt.Id,
-                    text = twt.Text,
-                    likes = twt.FavoriteCount,
-                    retweets = twt.RetweetCount
-                };
-                collections.Add(s);
-            }
-            return collections;
+            return helper.GetTwitterUser(User.GetAuthenticatedUser());
         }
         
-        public ObservableCollection<StatusTweet> getTweetsCollection()
+        public ObservableCollection<TwitterStatus> GetTweetsCollection()
         {
             var user = User.GetAuthenticatedUser();
-            return toObservable(Timeline.GetUserTimeline(user.Id));
+            return helper.CollectStatus(Timeline.GetUserTimeline(user.Id));
         }
 
-        public ObservableCollection<StatusTweet> searchQuery(string query)
+        public ObservableCollection<TwitterStatus> SearchQuery(string query)
         {
-            return toObservable(Search.SearchTweets(query));
+            return helper.CollectStatus(Search.SearchTweets(query));
         }
 
-        public ObservableCollection<StatusTweet> getMention()
+        public ObservableCollection<TwitterStatus> GetMention()
         {
-            return toObservable(Timeline.GetMentionsTimeline());
+            return helper.CollectStatus(Timeline.GetMentionsTimeline());
         }
 
-        public ObservableCollection<StatusTweet> searchRepliesToId(String tweetId)
+        public ObservableCollection<TwitterStatus> SearchRepliesToId(String tweetId)
         {
-            return toObservable(Search.SearchRepliesTo(Tweet.GetTweet(Convert.ToInt64(tweetId)), false));
+            return helper.CollectStatus(Search.SearchRepliesTo(Tweet.GetTweet(Convert.ToInt64(tweetId)), false));
+        }
+
+        public ObservableCollection<TwitterStatus> GetRetweetsOfMe()
+        {
+            return helper.CollectStatus(Timeline.GetRetweetsOfMeTimeline());
+        }
+
+        public ObservableCollection<TwitterUser> GetFollowers()
+        {
+            var user = User.GetAuthenticatedUser();
+            return(helper.CollectUser(user.GetFollowers()));
+            
         }
     }
     
