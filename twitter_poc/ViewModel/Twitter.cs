@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -23,8 +24,12 @@ namespace twitter_poc.ViewModel
         private string _pin;
         private ObservableCollection<TwitterStatus> _tweets = new ObservableCollection<TwitterStatus>();
         private ObservableCollection<TwitterUser> _users = new ObservableCollection<TwitterUser>();
+        private ObservableCollection<TwitterTrend> _trends = new ObservableCollection<TwitterTrend>();
+        private ObservableCollection<TwitterMessage> _messages = new ObservableCollection<TwitterMessage>();
         private string _query;
         private string _tweetid;
+        private string _username;
+        private string _woeid;
 
         public TwitterUser User
         {
@@ -62,6 +67,24 @@ namespace twitter_poc.ViewModel
                 RaisePropertyChangedEvent(nameof(Users));
             }
         }
+        public ObservableCollection<TwitterTrend> Trends
+        {
+            get { return _trends; }
+            set
+            {
+                _trends = value;
+                RaisePropertyChangedEvent(nameof(Trends));
+            }
+        }
+        public ObservableCollection<TwitterMessage> Messages
+        {
+            get { return _messages; }
+            set
+            {
+                _messages = value;
+                RaisePropertyChangedEvent(nameof(Messages));
+            }
+        }
         public string Query
         {
             get { return _query; }
@@ -80,6 +103,25 @@ namespace twitter_poc.ViewModel
                 RaisePropertyChangedEvent(nameof(TweetId));
             }
         }
+        public string UserName
+        {
+            get { return _username; }
+            set
+            {
+                _username = value;
+                RaisePropertyChangedEvent(nameof(UserName));
+            }
+        }
+        public string Woeid
+        {
+            get { return _woeid; }
+            set
+            {
+                _woeid = value;
+                RaisePropertyChangedEvent(nameof(Woeid));
+            }
+        }
+
 
         #region commands
         /*
@@ -181,6 +223,46 @@ namespace twitter_poc.ViewModel
         {
             Tweets.Clear();
             Tweets = twitter.GetRetweetsOfMe();
+        }
+
+        public ICommand SearchUser
+        {
+            get { return new DelegateCommand(searchUser); }
+        }
+
+        public void searchUser()
+        {
+            Users.Clear();
+            Users.Add(twitter.SearchUser(UserName));
+            searchUserTimeline(twitter.SearchUser(UserName).Id);
+        }
+        
+        public void searchUserTimeline (long userid)
+        {
+            Tweets.Clear();
+            Tweets = twitter.SearchUserTimeline(userid);
+        }
+
+        public ICommand SearchTrendByWoeid
+        {
+            get { return new DelegateCommand(searchTrendByWoeid); }
+        }
+
+        public void searchTrendByWoeid()
+        {
+            Trends.Clear();
+            Trends = twitter.getTrends(Woeid);
+        }
+
+        public ICommand GetMessages
+        {
+            get { return new DelegateCommand(getMessages); }
+        }
+
+        public void getMessages()
+        {
+            Messages.Clear();
+            Messages = twitter.GetMessages();
         }
 
         #endregion

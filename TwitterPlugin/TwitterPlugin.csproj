@@ -112,6 +112,10 @@
   <ItemGroup>
     <Compile Include="Helper.cs" />
     <Compile Include="Model\StatusCollection.cs" />
+    <Compile Include="Model\MessageCollection.cs" />
+    <Compile Include="Model\TwitterMessage.cs" />
+    <Compile Include="Model\TwitterTrend.cs" />
+    <Compile Include="Model\TrendCollection.cs" />
     <Compile Include="Model\TwitterStatus.cs" />
     <Compile Include="Model\TwitterUser.cs" />
     <Compile Include="Model\UserCollection.cs" />

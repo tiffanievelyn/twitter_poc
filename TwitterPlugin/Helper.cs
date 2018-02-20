@@ -25,7 +25,26 @@ namespace TwitterPlugin
                 FriendsCount = user.FriendsCount,
                 FavouritesCount = user.FavouritesCount,
                 IsGeoEnabled = user.GeoEnabled,
-                StatusCount = user.StatusesCount
+                StatusCount = user.StatusesCount,
+                Location = user.Location.ToString()
+            };
+            return tUser;
+        }
+
+        public Model.TwitterUser GetTwitterUser2(IUser user)
+        {
+            Model.TwitterUser tUser = new Model.TwitterUser
+            {
+                Id = user.Id,
+                Name = user.Name,
+                ScreenName = user.ScreenName,
+                IsProtected = user.Protected,
+                FollowersCount = user.FollowersCount,
+                FriendsCount = user.FriendsCount,
+                FavouritesCount = user.FavouritesCount,
+                IsGeoEnabled = user.GeoEnabled,
+                StatusCount = user.StatusesCount,
+                Location = user.Location.ToString()
             };
             return tUser;
         }
@@ -45,22 +64,22 @@ namespace TwitterPlugin
                     FriendsCount = user.FriendsCount,
                     FavouritesCount = user.FavouritesCount,
                     IsGeoEnabled = user.GeoEnabled,
-                    StatusCount = user.StatusesCount
+                    StatusCount = user.StatusesCount,
+                    Location = user.Location.ToString()
                 };
                 collections.Add(t);
             }
-            return collections; 
+            return collections;
         }
-        
+
         public ObservableCollection<Model.TwitterStatus> CollectStatus(IEnumerable<ITweet> tweets)
         {
-            Console.WriteLine(tweets);
             StatusCollection collections = new StatusCollection();
             foreach (var twt in tweets)
             {
                 Model.TwitterStatus s = new Model.TwitterStatus
                 {
-                    Username = twt.CreatedBy.Name,
+                    Username = twt.CreatedBy.ScreenName,
                     Id = twt.Id,
                     Text = twt.Text,
                     Likes = twt.FavoriteCount,
@@ -70,6 +89,46 @@ namespace TwitterPlugin
             }
             return collections;
         }
+
+        public ObservableCollection<TwitterTrend> CollectTrend(IPlaceTrends trends)
+        {
+            TrendCollection collection = new TrendCollection();
+            foreach (var tr in trends.Trends.ToList())
+            {
+                TwitterTrend t = new TwitterTrend
+                {
+                    Name = tr.Name,
+                    URL = tr.URL,
+                    Query = tr.Query,
+                    PromotedContent = tr.PromotedContent,
+                    TweetVolume = tr.TweetVolume,
+                };
+                collection.Add(t);
+            }
+            return collection;
+        }
+
+        public ObservableCollection<TwitterMessage> CollectMessage(IEnumerable<IMessage> messages)
+        {
+            MessageCollection collection = new MessageCollection();
+            foreach (var message in messages)
+            {
+                Console.WriteLine(message);
+                TwitterMessage m = new TwitterMessage
+                {
+                    Id = message.Id,
+                    SenderId = message.SenderId,
+                    SenderScreenname = message.SenderScreenName,
+                    RecipientId = message.RecipientId,
+                    RecipientScreenname = message.RecipientScreenName,
+                    Text = message.Text,
+                    CreatedAt = message.CreatedAt
+                };
+                collection.Add(m);
+            }
+            return collection;
+        }
+
 
     }
 }

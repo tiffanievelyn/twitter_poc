@@ -13,18 +13,19 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0"  VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
 
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <!--<Button Style="{StaticResource buttonStyle}" Command="{Binding QuickLogin}" Content="QuickLogin"/>-->
                 <Button Style="{StaticResource buttonStyle}" Name="LoginButton" Command="{Binding Login}" Content="UserLogin"/>
-                <TextBox Text="{Binding Pin}"/>
-                <Button Command="{Binding Verify}" Content="Verify"/>
+                <TextBox MinWidth="100" Height="38" Text="{Binding Pin}"/>
+                <Button Style="{StaticResource buttonStyle}" Command="{Binding Verify}" Content="Verify"/>
 
             </StackPanel>
 
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -58,14 +59,15 @@
                 <Label Grid.Row="7" Grid.Column="1" Content="{Binding Path=User.IsGeoEnabled}"/>
                 <Label Grid.Row="8" Grid.Column="0" Content="Tweets : "/>
                 <Label Grid.Row="8" Grid.Column="1" Content="{Binding Path=User.StatusCount}"/>
-
-
+                <Label Grid.Row="9" Grid.Column="0" Content="Location  : "/>
+                <Label Grid.Row="9" Grid.Column="1" Content="{Binding Path=User.Location}"/>
             </Grid>
 
 
             <Button Command="{Binding GetFollowers}" Content="Get Followers"/>
             <Button Command="{Binding GetTimeline}" Content="Get Timeline"/>
             <Button Command="{Binding GetMention}" Content="Get Mention"/>
+            <Button Command="{Binding GetMessages}" Content="Get Messages"/>
             <Button Command="{Binding GetRetweetsOfMe}" Content="Get Retweets Of Me"/>
 
             <Label Content="Search Query"/>
@@ -75,11 +77,21 @@
             <Label Content="Search Replies to Tweet ID"/>
             <TextBox Text="{Binding TweetId}"/>
             <Button Command="{Binding SearchRepliesToId}" Content="Search Replies to Tweet ID"/>
-            
+
+            <Label Content="Search User and Timeline by username"/>
+            <TextBox Text="{Binding UserName}"/>
+            <Button Command="{Binding SearchUser}" Content="Search"/>
+
+            <Label Content="Search trend by woeid"/>
+            <TextBox Text="{Binding Woeid}"/>
+            <Button Command="{Binding SearchTrendByWoeid}" Content="Search Trends"/>
+
         </StackPanel>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -94,6 +106,7 @@
                         <GridViewColumn Width="Auto" Header="Following" DisplayMemberBinding="{Binding FriendsCount}"/>
                         <GridViewColumn Width="Auto" Header="Likes" DisplayMemberBinding="{Binding FavouritesCount}"/>
                         <GridViewColumn Width="Auto" Header="Status" DisplayMemberBinding="{Binding StatusCount}"/>
+                        <GridViewColumn Width="Auto" Header="Location" DisplayMemberBinding="{Binding Location}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -106,6 +119,32 @@
                         <GridViewColumn Width="Auto" Header="Text" DisplayMemberBinding="{Binding Text}"/>
                         <GridViewColumn Width="Auto" Header="Likes" DisplayMemberBinding="{Binding Likes}"/>
                         <GridViewColumn Width="Auto" Header="Retweets" DisplayMemberBinding="{Binding Retweets}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <ListView Grid.Row="2" ItemsSource="{Binding Trends}" >
+                <ListView.View>
+                    <GridView >
+                        <GridViewColumn Width="Auto" Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Width="Auto" Header="URL" DisplayMemberBinding="{Binding URL}"/>
+                        <GridViewColumn Width="Auto" Header="Query" DisplayMemberBinding="{Binding Query}"/>
+                        <GridViewColumn Width="Auto" Header="Promoted Content" DisplayMemberBinding="{Binding PromotedContent}"/>
+                        <GridViewColumn Width="Auto" Header="TweetVolume" DisplayMemberBinding="{Binding TweetVolume}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <ListView Grid.Row="3" ItemsSource="{Binding Messages}" >
+                <ListView.View>
+                    <GridView >
+                        <GridViewColumn Width="Auto" Header="Id" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Width="Auto" Header="Created at" DisplayMemberBinding="{Binding CreatedAt}"/>
+                        <GridViewColumn Width="Auto" Header="Sender id" DisplayMemberBinding="{Binding SenderId}"/>
+                        <GridViewColumn Width="Auto" Header="Sender screenname" DisplayMemberBinding="{Binding SenderScreenname}"/>
+                        <GridViewColumn Width="Auto" Header="Recipient id" DisplayMemberBinding="{Binding RecipientId}"/>
+                        <GridViewColumn Width="Auto" Header="Recipient screenname" DisplayMemberBinding="{Binding RecipientScreenname}"/>
+                        <GridViewColumn Width="Auto" Header="Text" DisplayMemberBinding="{Binding Text}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

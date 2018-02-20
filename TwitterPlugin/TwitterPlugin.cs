@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -73,8 +74,30 @@ namespace TwitterPlugin
         {
             var user = User.GetAuthenticatedUser();
             return(helper.CollectUser(user.GetFollowers()));
+        }
+
+        public TwitterUser SearchUser(string username)
+        {   
+            return helper.GetTwitterUser2(User.GetUserFromScreenName(username));
+        }
+
+        public ObservableCollection<TwitterStatus> SearchUserTimeline(long userid)
+        {
+            var user = User.GetUserFromId(userid);
+            return helper.CollectStatus(Timeline.GetUserTimeline(user.Id));
+        }
+
+        public ObservableCollection<TwitterTrend> getTrends(string woeid)
+        {
+            return helper.CollectTrend(Trends.GetTrendsAt(Convert.ToInt64(woeid)));
+        }
+
+        public ObservableCollection<TwitterMessage> GetMessages()
+        {
+            return helper.CollectMessage(Message.GetLatestMessagesReceived());
             
         }
+
     }
     
 }

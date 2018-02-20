@@ -17,5 +17,6 @@ namespace TwitterPlugin.Model
         public int FavouritesCount {get; set;}
         public Boolean IsGeoEnabled { get; set; }
         public int StatusCount { get; set; }
+        public string Location { get; set; }
     }
 }
