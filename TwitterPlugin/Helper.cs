@@ -113,7 +113,6 @@ namespace TwitterPlugin
             MessageCollection collection = new MessageCollection();
             foreach (var message in messages)
             {
-                Console.WriteLine(message);
                 TwitterMessage m = new TwitterMessage
                 {
                     Id = message.Id,

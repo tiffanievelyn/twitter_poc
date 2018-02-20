@@ -95,7 +95,6 @@ namespace TwitterPlugin
         public ObservableCollection<TwitterMessage> GetMessages()
         {
             return helper.CollectMessage(Message.GetLatestMessagesReceived());
-            
         }
 
     }
