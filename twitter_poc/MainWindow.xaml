@@ -114,6 +114,8 @@
             <TextBox Text="{Binding Woeid}"/>
             <Button Command="{Binding SearchTrendByWoeid}" Content="Search Trends"/>
 
+            <Button Command="{Binding ExportToCsv}" Content="Export tweet to csv"/>
+
         </StackPanel>
 
         <Grid Grid.Column="1">

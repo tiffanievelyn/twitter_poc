@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -301,6 +302,41 @@ namespace twitter_poc.ViewModel
         public void getUserInfo()
         {
             User = twitter.UserInfo();
+        }
+
+        public ICommand ExportToCsv
+        {
+            get { return new DelegateCommand(exportToCsv); }
+        }
+
+        public void exportToCsv()
+        {
+            var csv = new StringBuilder();
+            var header = "id,username,text,likes,retweets";
+            csv.AppendLine(header);
+
+            foreach (var tweet in Tweets)
+            {
+                var id = tweet.Id.ToString();
+                var username = tweet.Username;
+                string text = "";
+                foreach (var c in tweet.Text)
+                {
+                    if (c != '\n' && c != '\r' && c != ',')
+                    {
+                        text += c;
+                    }
+                    
+                }
+                var likes = tweet.Likes;
+                var retweets = tweet.Retweets;
+
+                var line = string.Format("{0},{1},{2},{3},{4}", id, username, text, likes, retweets);
+
+                csv.AppendLine(line);
+            }
+
+            File.WriteAllText("C:/Users/tlim/Desktop/output.csv", csv.ToString());
         }
     }
 }

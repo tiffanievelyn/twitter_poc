@@ -37,7 +37,6 @@ namespace TwitterPlugin
         {
             var userCredentials = AuthFlow.CreateCredentialsFromVerifierCode(PinCode, authenticationContext);
             Auth.SetCredentials(userCredentials);
-            Console.WriteLine(User.GetAuthenticatedUser());
         }
 
         public TwitterUser UserInfo()
