@@ -31,6 +31,10 @@ namespace twitter_poc.ViewModel
         private string _username;
         private string _woeid;
 
+        private double _latitude;
+        private double _longitude;
+        private string _searchtype;
+
         public TwitterUser User
         {
             get { return _user; }
@@ -121,6 +125,33 @@ namespace twitter_poc.ViewModel
                 RaisePropertyChangedEvent(nameof(Woeid));
             }
         }
+        public double Latitude
+        {
+            get { return _latitude; }
+            set
+            {
+                _latitude = value;
+                RaisePropertyChangedEvent(nameof(Latitude));
+            }
+        }
+        public double Longitude
+        {
+            get { return _longitude; }
+            set
+            {
+                _longitude = value;
+                RaisePropertyChangedEvent(nameof(Longitude));
+            } 
+        }
+        public string SearchType
+        {
+            get { return _searchtype; }
+            set
+            {
+                _searchtype = value;
+                RaisePropertyChangedEvent(nameof(SearchType));
+            }
+        }
 
 
         #region commands
@@ -189,7 +220,7 @@ namespace twitter_poc.ViewModel
         public void search()
         {
             Tweets.Clear();
-            Tweets = twitter.SearchQuery(Query);
+            Tweets = twitter.SearchQuery(Query,Latitude,Longitude,SearchType);
         }
 
         public ICommand GetMention

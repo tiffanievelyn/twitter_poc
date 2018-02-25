@@ -62,17 +62,45 @@
                 <Label Grid.Row="9" Grid.Column="0" Content="Location  : "/>
                 <Label Grid.Row="9" Grid.Column="1" Content="{Binding Path=User.Location}"/>
             </Grid>
-
-
-            <Button Command="{Binding GetFollowers}" Content="Get Followers"/>
-            <Button Command="{Binding GetTimeline}" Content="Get Timeline"/>
-            <Button Command="{Binding GetMention}" Content="Get Mention"/>
-            <Button Command="{Binding GetMessages}" Content="Get Messages"/>
-            <Button Command="{Binding GetRetweetsOfMe}" Content="Get Retweets Of Me"/>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+            
+                <Button Grid.Column="0" Grid.Row="0" Command="{Binding GetFollowers}" Content="Get Followers"/>
+                <Button Grid.Column="2" Grid.Row="0" Command="{Binding GetTimeline}" Content="Get Timeline"/>
+                <Button Grid.Column="0" Grid.Row="1" Command="{Binding GetMention}" Content="Get Mention"/>
+                <Button Grid.Column="2" Grid.Row="1" Command="{Binding GetMessages}" Content="Get Messages"/>
+                <Button Grid.Column="0" Grid.Row="2" Command="{Binding GetRetweetsOfMe}" Content="Get Retweets Of Me"/>
+            </Grid>
 
             <Label Content="Search Query"/>
-            <TextBox Text="{Binding Query}"/>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Query" Width="70"/>
+                <TextBox Text="{Binding Query}" Width="200" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Latitude" Width="70"/>
+                <TextBox Text="{Binding Latitude}" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Longitude" Width="70"/>
+                <TextBox Text="{Binding Longitude}" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="P/R/M" Width="70"/>
+                <TextBox Text="{Binding SearchType}" Width="200"/>
+            </StackPanel>
             <Button Command="{Binding Search}" Content="Search"/>
+            
 
             <Label Content="Search Replies to Tweet ID"/>
             <TextBox Text="{Binding TweetId}"/>

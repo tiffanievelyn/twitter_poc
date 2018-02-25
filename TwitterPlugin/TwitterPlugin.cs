@@ -5,6 +5,7 @@ using System.Diagnostics;
 
 using Tweetinvi;
 using Tweetinvi.Models;
+using Tweetinvi.Parameters;
 using TwitterPlugin.Model;
 
 namespace TwitterPlugin
@@ -50,9 +51,28 @@ namespace TwitterPlugin
             return helper.CollectStatus(Timeline.GetUserTimeline(user.Id));
         }
 
-        public ObservableCollection<TwitterStatus> SearchQuery(string query)
+        public ObservableCollection<TwitterStatus> SearchQuery(string query, double latitude, double longitude, string searchtype)
         {
-            return helper.CollectStatus(Search.SearchTweets(query));
+            var s = SearchResultType.Popular;
+
+            if (searchtype == "R")
+            {
+                s = SearchResultType.Recent;
+            }
+            else if (searchtype == "M")
+            {
+                s = SearchResultType.Mixed;
+            }
+
+            IEnumerable<ITweet> tweets = Search.SearchTweets(new SearchTweetsParameters(query)
+            {
+                GeoCode = new GeoCode(latitude, longitude, 50, DistanceMeasure.Kilometers),
+                SearchType = s
+            });
+            
+            ObservableCollection<TwitterStatus> col =  helper.CollectStatus(tweets);
+            
+            return col;
         }
 
         public ObservableCollection<TwitterStatus> GetMention()
