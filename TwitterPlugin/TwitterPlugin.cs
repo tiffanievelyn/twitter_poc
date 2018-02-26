@@ -50,7 +50,7 @@ namespace TwitterPlugin
             return helper.CollectStatus(Timeline.GetUserTimeline(user.Id));
         }
 
-        public ObservableCollection<TwitterStatus> SearchQuery(string query, double latitude, double longitude, string searchtype)
+        public ObservableCollection<TwitterStatus> SearchQuery(string query, double latitude, double longitude, string searchtype, int radius)
         {
             var s = SearchResultType.Popular;
 
@@ -65,7 +65,7 @@ namespace TwitterPlugin
 
             IEnumerable<ITweet> tweets = Search.SearchTweets(new SearchTweetsParameters(query)
             {
-                GeoCode = new GeoCode(latitude, longitude, 50, DistanceMeasure.Kilometers),
+                GeoCode = new GeoCode(latitude, longitude, radius, DistanceMeasure.Kilometers),
                 SearchType = s
             });
             
@@ -104,6 +104,15 @@ namespace TwitterPlugin
         {
             var user = User.GetUserFromId(userid);
             return helper.CollectStatus(Timeline.GetUserTimeline(user.Id));
+        }
+
+        public void getTre()
+        {
+            var locations = Trends.GetAvailableTrendLocations();
+            foreach (var location in locations)
+            {
+                Console.WriteLine(location.Name + ", " + location.Country);
+            }
         }
 
         public ObservableCollection<TwitterTrend> getTrends(string woeid)

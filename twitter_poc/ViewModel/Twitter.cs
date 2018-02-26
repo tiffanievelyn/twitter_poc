@@ -35,6 +35,7 @@ namespace twitter_poc.ViewModel
         private double _latitude;
         private double _longitude;
         private string _searchtype;
+        private int _radius;
 
         public TwitterUser User
         {
@@ -153,6 +154,15 @@ namespace twitter_poc.ViewModel
                 RaisePropertyChangedEvent(nameof(SearchType));
             }
         }
+        public int Radius
+        {
+            get { return _radius; }
+            set
+            {
+                _radius = value;
+                RaisePropertyChangedEvent(nameof(Radius));
+            }
+        }
 
 
         #region commands
@@ -221,7 +231,7 @@ namespace twitter_poc.ViewModel
         public void search()
         {
             Tweets.Clear();
-            Tweets = twitter.SearchQuery(Query,Latitude,Longitude,SearchType);
+            Tweets = twitter.SearchQuery(Query,Latitude,Longitude,SearchType, Radius);
         }
 
         public ICommand GetMention
@@ -284,6 +294,7 @@ namespace twitter_poc.ViewModel
         {
             Trends.Clear();
             Trends = twitter.getTrends(Woeid);
+            twitter.getTre();
         }
 
         public ICommand GetMessages

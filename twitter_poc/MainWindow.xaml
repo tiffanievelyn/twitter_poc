@@ -66,7 +66,6 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="0"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -76,10 +75,11 @@
                 </Grid.RowDefinitions>
             
                 <Button Grid.Column="0" Grid.Row="0" Command="{Binding GetFollowers}" Content="Get Followers"/>
-                <Button Grid.Column="2" Grid.Row="0" Command="{Binding GetTimeline}" Content="Get Timeline"/>
+                <Button Grid.Column="1" Grid.Row="0" Command="{Binding GetTimeline}" Content="Get Timeline"/>
                 <Button Grid.Column="0" Grid.Row="1" Command="{Binding GetMention}" Content="Get Mention"/>
-                <Button Grid.Column="2" Grid.Row="1" Command="{Binding GetMessages}" Content="Get Messages"/>
+                <Button Grid.Column="1" Grid.Row="1" Command="{Binding GetMessages}" Content="Get Messages"/>
                 <Button Grid.Column="0" Grid.Row="2" Command="{Binding GetRetweetsOfMe}" Content="Get Retweets Of Me"/>
+                <Button Grid.Column="1" Grid.Row="2" Command="{Binding ExportToCsv}" Content="Export tweet to csv"/>
             </Grid>
 
             <Label Content="Search Query"/>
@@ -99,6 +99,10 @@
                 <Label Content="P/R/M" Width="70"/>
                 <TextBox Text="{Binding SearchType}" Width="200"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Radius" Width="70"/>
+                <TextBox Text="{Binding Radius}" Width="200"/>
+            </StackPanel>
             <Button Command="{Binding Search}" Content="Search"/>
             
 
@@ -113,9 +117,6 @@
             <Label Content="Search trend by woeid"/>
             <TextBox Text="{Binding Woeid}"/>
             <Button Command="{Binding SearchTrendByWoeid}" Content="Search Trends"/>
-
-            <Button Command="{Binding ExportToCsv}" Content="Export tweet to csv"/>
-
         </StackPanel>
 
         <Grid Grid.Column="1">

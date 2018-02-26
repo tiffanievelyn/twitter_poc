@@ -77,15 +77,19 @@ namespace TwitterPlugin
             StatusCollection collections = new StatusCollection();
             foreach (var twt in tweets)
             {
-                Model.TwitterStatus s = new Model.TwitterStatus
+                if (!twt.IsRetweet)
                 {
-                    Username = twt.CreatedBy.ScreenName,
-                    Id = twt.Id,
-                    Text = twt.Text,
-                    Likes = twt.FavoriteCount,
-                    Retweets = twt.RetweetCount
-                };
-                collections.Add(s);
+                    Model.TwitterStatus s = new Model.TwitterStatus
+                    {
+                        Username = twt.CreatedBy.ScreenName,
+                        Id = twt.Id,
+                        Text = twt.Text,
+                        Likes = twt.FavoriteCount,
+                        Retweets = twt.RetweetCount
+                    };
+                    collections.Add(s);
+                }
+                
             }
             return collections;
         }
