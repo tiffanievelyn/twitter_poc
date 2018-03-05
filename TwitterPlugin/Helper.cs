@@ -83,7 +83,7 @@ namespace TwitterPlugin
                     {
                         Username = twt.CreatedBy.ScreenName,
                         Id = twt.Id,
-                        Text = twt.Text,
+                        Text = twt.FullText,
                         Likes = twt.FavoriteCount,
                         Retweets = twt.RetweetCount
                     };

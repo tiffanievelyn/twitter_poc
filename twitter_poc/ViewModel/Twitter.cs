@@ -32,10 +32,10 @@ namespace twitter_poc.ViewModel
         private string _username;
         private string _woeid;
 
-        private double _latitude;
-        private double _longitude;
-        private string _searchtype;
-        private int _radius;
+        private double _latitude = -38.037;
+        private double _longitude = 145.11300000000006;
+        private string _searchtype = "R";
+        private int _radius = 10;
 
         public TwitterUser User
         {
