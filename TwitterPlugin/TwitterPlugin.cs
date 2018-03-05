@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -15,7 +16,10 @@ namespace TwitterPlugin
         Helper helper = new Helper();
 
         static ConsumerCredentials appCred = new ConsumerCredentials(UserConfig.ConsumerKey, UserConfig.ConsumerSecret);
-        IAuthenticationContext authenticationContext = AuthFlow.InitAuthentication(appCred);
+        
+        IAuthenticationContext authenticationContext;
+
+        ITwitterCredentials userCreds = new TwitterCredentials();
 
         public TwitterPlugin(){}
         
@@ -30,13 +34,33 @@ namespace TwitterPlugin
 
         public void Login()
         {
+            authenticationContext = AuthFlow.InitAuthentication(appCred);
             Process.Start(authenticationContext.AuthorizationURL);
         }
 
-        public void VerifyUser(string PinCode)
+        public void LoginWeb()
         {
-            var userCredentials = AuthFlow.CreateCredentialsFromVerifierCode(PinCode, authenticationContext);
-            Auth.SetCredentials(userCredentials);
+            string redirectURL = "http://localhost:4200/twitter";
+
+            authenticationContext = AuthFlow.InitAuthentication(appCred, redirectURL);
+            Process.Start(authenticationContext.AuthorizationURL);
+
+        }
+
+        public void VerifyUser(string loginPin)
+        {
+            userCreds = AuthFlow.CreateCredentialsFromVerifierCode(loginPin, authenticationContext);
+            Auth.SetCredentials(userCreds);
+            TweetinviConfig.CurrentThreadSettings.TweetMode = TweetMode.Extended;
+            TweetinviConfig.ApplicationSettings.TweetMode = TweetMode.Extended;
+        }
+
+        public void VerifyUserWeb(string verifierCode, string authorizationid)
+        {
+            userCreds = AuthFlow.CreateCredentialsFromVerifierCode(verifierCode, authorizationid);
+            Auth.SetCredentials(userCreds);
+            TweetinviConfig.CurrentThreadSettings.TweetMode = TweetMode.Extended;
+            TweetinviConfig.ApplicationSettings.TweetMode = TweetMode.Extended;            
         }
 
         public TwitterUser UserInfo()
